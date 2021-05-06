@@ -1,3 +1,5 @@
+// Challenge 4-3
+
 object EitherStudy {
 
   sealed trait Either[+E, +A] {
