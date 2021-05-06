@@ -184,4 +184,31 @@ object Main {
 
   }
 
+  // Challenge 6-1
+  def filter[T](list: List[T]) (f: T => Boolean) : List[T] = {
+    list.foldLeft(List.empty[T]) {(acc, item) => {
+      if(f(item)) acc :+ item else acc
+    }}
+  }
+
+  // Challenge 6-2
+  def flatten(list: List[_]): List[Any] = list match {
+    case Nil => Nil
+    case (x: List[_]) :: tail => flatten(x) ++ flatten(tail)
+    case x::tail => x :: flatten(tail)
+  }
+
+  // Challenge 6-3
+  def split[A](n: Int, list: List[A]): (List[A], List[A]) = {
+    @tailrec
+    def splitRec(k: Int, acc: (List[A], List[A])): (List[A], List[A]) = {
+      if(k == 0) acc
+      else if (acc._2.nonEmpty) {
+        val x +: xs = acc._2
+        splitRec(k - 1, (acc._1 :+ x, xs) )
+      } else acc
+    }
+
+    splitRec(n, (List.empty[A], list))
+  }
 }
