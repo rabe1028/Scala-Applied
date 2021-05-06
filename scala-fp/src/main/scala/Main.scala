@@ -1,4 +1,6 @@
+import scala.{:+, ::}
 import scala.annotation.tailrec
+import scala.collection.immutable.{HashMap, TreeMap}
 import scala.util.Try
 import scala.util.control.NonFatal
 
@@ -91,4 +93,95 @@ object Main {
       (for (i <- 0 until size) yield "a").mkString
     }
   }
+
+  // Challenge 5-1
+  def benchmark(tag: String = "")(f: => Unit): Unit = {
+    val begin = System.currentTimeMillis()
+    f
+    val end = System.currentTimeMillis()
+    val formatter = java.text.NumberFormat.getNumberInstance()
+    println(s"time: ${formatter.format(end - begin)} ミリ秒 (${tag}) ")
+  }
+
+  def benchmarkAppendPerformance(): Unit = {
+    println("末尾追加")
+    benchmark("List") {
+      var result = (0 until 10000).foldLeft(List.empty[Int]) {(acc: List[Int], i: Int) =>
+        acc :+ i
+      }
+    }
+
+    benchmark("配列") {
+      var result = (0 until 10000).foldLeft(Array.empty[Int]) {(acc: Array[Int], i: Int) =>
+        acc :+ i
+      }
+    }
+
+    println("先頭追加")
+    benchmark("List") {
+      var result = (0 until 10000).foldLeft(List.empty[Int]) {(acc: List[Int], i: Int) =>
+        i :: acc
+      }
+    }
+
+    benchmark("配列") {
+      var result = (0 until 10000).foldLeft(Array.empty[Int]) {(acc: Array[Int], i: Int) =>
+        i +: acc
+      }
+    }
+  }
+
+  // Challenge 5-2
+  def benchmarkNano(tag: String = "")(f: => Unit) = {
+    val begin = System.nanoTime()
+    f
+    val end = System.nanoTime()
+    val formatter = java.text.NumberFormat.getNumberInstance()
+    println(s"time: ${formatter.format(end - begin)} ナノ秒 (${tag})")
+  }
+
+  def benchmarkIndexing(): Unit = {
+    val size = 10000000
+    val list = (1 to size).toList
+    benchmarkNano("List") {
+      list(10000000 - 1)
+    }
+    val arr  = (1 to size).toArray
+    benchmarkNano("Array") {
+      arr(10000000 - 1)
+    }
+  }
+
+  // Challenge 5-3
+  def benchmarkMapSpec(): Unit = {
+    val size = 100000
+
+    var arr: Array[Int] = Array.empty
+    benchmarkNano("Array, Instance") {
+      arr = (1 to size).toArray
+    }
+    benchmarkNano("Array, Index") {
+      arr(size - 1)
+    }
+
+    var hashmap: HashMap[Int, Int] = HashMap.empty
+    benchmarkNano("Hashmap, Instance") {
+      hashmap = HashMap((1 to size).map(i => i -> i): _*)
+    }
+
+    benchmarkNano("Hashmap, Index") {
+      hashmap(size - 1)
+    }
+
+    var treemap: TreeMap[Int, Int] = TreeMap.empty
+    benchmarkNano("Treemap, Instance") {
+      treemap = TreeMap((1 to size).map(i => i -> i): _*)
+    }
+
+    benchmarkNano("Treemap, Index") {
+      treemap(size - 1)
+    }
+
+  }
+
 }
