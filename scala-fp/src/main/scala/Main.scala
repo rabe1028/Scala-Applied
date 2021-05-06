@@ -1,4 +1,6 @@
 import scala.annotation.tailrec
+import scala.util.Try
+import scala.util.control.NonFatal
 
 object Main {
 
@@ -80,5 +82,13 @@ object Main {
       w2 <- f2
       w3 <- f3
     } yield w1 andThen w2 andThen w3
+  }
+
+  // Challenge 4-1
+  def createString(size: Int): Try[String] = {
+    Try {
+      require(size >= 0, "sizeはゼロ以上である必要があります")
+      (for (i <- 0 until size) yield "a").mkString
+    }
   }
 }
