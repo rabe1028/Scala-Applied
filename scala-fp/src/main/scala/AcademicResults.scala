@@ -1,3 +1,5 @@
+// Challenge 4-2
+
 object AcademicResults extends  App {
 
   private[this] val results = Map(
@@ -13,14 +15,8 @@ object AcademicResults extends  App {
 
   def find(name: String): Result = {
     (for {
-      pointOpt <- results.get(name) match {
-        case Some(v) => Right(v)
-        case None => Left(StudentNotFound)
-      }
-      point <- pointOpt match {
-        case Some(point) => Right(point)
-        case None => Left(ResultNotFound)
-      }
+      pointOpt <- results.get(name).toRight(StudentNotFound).right
+      point <- pointOpt.toRight(ResultNotFound).right
     } yield Point(point)).merge
   }
 
