@@ -33,15 +33,15 @@ object Main {
   }
 
   // Challenge 1-3
-  def twice(f: Int => Int) = {
+  def twice(f: Int => Int): Int => Int = {
     (x: Int) => f(f(x))
   }
 
   def search[T](seq: Seq[T])(f: T => Boolean) : Boolean = {
     def searchRec(i: Int) : Boolean = {
-      if(seq.length == i) false
-      else if (f(seq(i))) true
-      else searchRec(i+1)
+      if(seq.length == i) { false }
+      else if (f(seq(i))) { true }
+      else { searchRec(i + 1) }
     }
     searchRec(0)
   }
@@ -50,20 +50,22 @@ object Main {
   def isSorted[E](sortedSeq: Seq[E])(ordered: (E, E) => Boolean): Boolean = {
     def isSortedRec(i: Int): Boolean = {
       // 末尾に達した時、もしくは、要素がない時
-      if (sortedSeq.length == i + 1 || sortedSeq.isEmpty) true
-      else if (ordered(sortedSeq(i), sortedSeq(i + 1))) isSortedRec(i + 1)
-      else false
+      if (sortedSeq.length == i + 1 || sortedSeq.isEmpty) { true }
+      else if (ordered(sortedSeq(i), sortedSeq(i + 1)))  { isSortedRec(i + 1) }
+      else { false }
     }
     isSortedRec(0)
   }
 
   // Challenge 3-1
   def optionHandling(): Option[Int] = {
+    // scalastyle:off magic.number
     val v1: Option[Int] = Some(2)
     val v2: Option[Int] = Some(3)
     val v3: Option[Int] = Some(5)
     val v4: Option[Int] = Some(7)
     val v5: Option[Int] = Some(11)
+    // scalastyle:on magic.number
 
     for {
       i1 <- v1
@@ -100,11 +102,13 @@ object Main {
     f
     val end = System.currentTimeMillis()
     val formatter = java.text.NumberFormat.getNumberInstance()
-    println(s"time: ${formatter.format(end - begin)} ミリ秒 (${tag}) ")
+    //noinspection ScalaStyle
+    println(s"time: ${formatter.format(end - begin)} ミリ秒 (${tag}) ") // scalastyle:ignore
   }
 
   def benchmarkAppendPerformance(): Unit = {
-    println("末尾追加")
+    //noinspection ScalaStyle
+    println("末尾追加") // scalastyle:ignore
     benchmark("List") {
       var result = (0 until 10000).foldLeft(List.empty[Int]) {(acc: List[Int], i: Int) =>
         acc :+ i
@@ -116,8 +120,8 @@ object Main {
         acc :+ i
       }
     }
-
-    println("先頭追加")
+    //noinspection ScalaStyle
+    println("先頭追加") // scalastyle:ignore
     benchmark("List") {
       var result = (0 until 10000).foldLeft(List.empty[Int]) {(acc: List[Int], i: Int) =>
         i :: acc
@@ -132,12 +136,12 @@ object Main {
   }
 
   // Challenge 5-2
-  def benchmarkNano(tag: String = "")(f: => Unit) = {
+  def benchmarkNano(tag: String = "")(f: => Unit): Unit = {
     val begin = System.nanoTime()
     f
     val end = System.nanoTime()
     val formatter = java.text.NumberFormat.getNumberInstance()
-    println(s"time: ${formatter.format(end - begin)} ナノ秒 (${tag})")
+    println(s"time: ${formatter.format(end - begin)} ナノ秒 (${tag})") // scalastyle:ignore
   }
 
   def benchmarkIndexing(): Unit = {
@@ -202,11 +206,11 @@ object Main {
   def split[A](n: Int, list: List[A]): (List[A], List[A]) = {
     @tailrec
     def splitRec(k: Int, acc: (List[A], List[A])): (List[A], List[A]) = {
-      if(k == 0) acc
+      if(k == 0) { acc }
       else if (acc._2.nonEmpty) {
         val x +: xs = acc._2
         splitRec(k - 1, (acc._1 :+ x, xs) )
-      } else acc
+      } else { acc }
     }
 
     splitRec(n, (List.empty[A], list))
@@ -228,11 +232,11 @@ object Main {
     def split(n: Int): (List[A], List[A]) = {
       @tailrec
       def splitRec(k: Int, acc: (List[A], List[A])): (List[A], List[A]) = {
-        if(k == 0) acc
+        if(k == 0) { acc }
         else if (acc._2.nonEmpty) {
           val x +: xs = acc._2
           splitRec(k - 1, (acc._1 :+ x, xs) )
-        } else acc
+        } else { acc }
       }
 
       splitRec(n, (List.empty[A], l))
