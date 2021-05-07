@@ -28,5 +28,4 @@ object TypeClassStudy {
 
   def sum[A](lst: List[A])(implicit m: Additive[A]): A = lst.foldLeft(m.zero)((x, y) => m.plus(x, y))
 
-
 }

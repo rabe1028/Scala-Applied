@@ -2,10 +2,12 @@
 
 object AcademicResults extends  App {
 
+  // scalastyle:off magic.number
   private[this] val results = Map(
     "taro" -> Some(90),
     "jiro" -> None
   )
+  // scalastyle:on magic.number
 
   sealed trait Result
   case class Point(point: Int) extends Result
@@ -20,7 +22,9 @@ object AcademicResults extends  App {
     } yield Point(point)).merge
   }
 
+  // scalastyle:off
   println(find("taro")) // Point(90)
   println(find("jiro")) // ResultNotFound
   println(find("saburo")) // StudentNotFound
+  // scalastyle:on
 }

@@ -19,3 +19,4 @@ object OptionStudy {
   case object None extends Option[Nothing]
 
 }
+
