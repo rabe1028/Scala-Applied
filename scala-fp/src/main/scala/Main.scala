@@ -218,5 +218,27 @@ object Main {
 //    val tribs: Stream[Int] = 0 #:: 0 #:: 1 #:: tribs.zip(tribs.tail).zip(tribs.tail.tail).map { n => n._1._1 + n._1._2 + n._2 }
   }
 
+  // Challenge 8-1
+  implicit class TwiceString(val string: String) {
+    def twice: String = string + string
+  }
+
+  // Challenge 8-2
+  implicit class SplitList[A](val l : List[A]) {
+    def split(n: Int): (List[A], List[A]) = {
+      @tailrec
+      def splitRec(k: Int, acc: (List[A], List[A])): (List[A], List[A]) = {
+        if(k == 0) acc
+        else if (acc._2.nonEmpty) {
+          val x +: xs = acc._2
+          splitRec(k - 1, (acc._1 :+ x, xs) )
+        } else acc
+      }
+
+      splitRec(n, (List.empty[A], l))
+    }
+  }
+
+  // Challenge 8-3
 
 }
