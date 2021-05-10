@@ -29,10 +29,26 @@ case class TimeCommand(regex: Regex, start: Int, end:Int, zone: String, replies:
       case Some(_) if isInTime =>
         println(Random.shuffle(replies).head)
         true
-      case Some(v) => false
+      case Some(_) => false
       case None => false
     }
   }
 }
 
-case class
+case class DateCommand(regex: Regex, month: Int, day: Int, zone: String, replies: List[String]) extends Command {
+  override def exec(input: String): Boolean = {
+    val now = LocalDateTime.now().atZone(ZoneId.of(zone))
+    val isToday = month == now.getMonthValue && day == now.getDayOfMonth
+    println(now.getMonthValue)
+    regex.findFirstIn(input) match {
+      case Some(_) if isToday =>
+        println(Random.shuffle(replies).head)
+        true
+      case Some(_) => {
+        println("illegal date")
+        false
+      }
+      case None => false
+    }
+  }
+}
